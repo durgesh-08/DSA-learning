@@ -46,4 +46,17 @@ public class Node {
                 ", right=" + right +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+        return getValue() == node.getValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return getValue();
+    }
 }
