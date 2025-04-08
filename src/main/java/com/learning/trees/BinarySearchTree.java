@@ -1,7 +1,6 @@
 package com.learning.trees;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BinarySearchTree {
     Node rootNode;
@@ -42,16 +41,31 @@ public class BinarySearchTree {
     }
 
     private Node lookUp(int value, Node node)    {
-        if(node == null)    {
+        if(node == null)   {
             return null;
         }
-        if(value == node.getValue())    {
+        if(node.getValue()==value)  {
             return node;
         }
-        if(value < node.getValue()) {
-            return lookUp(value, node.getLeft());
-        }   else if(value > node.getValue()) {
+        else if(value < node.getValue())    {
+            return lookUp(value,node.getLeft());
+        }   else if(value > node.getValue())    {
             return lookUp(value, node.getRight());
+        }
+        return null;
+    }
+
+    public Node searchBST(Node root, int val)    {
+        if(root == null)   {
+            return null;
+        }
+        if(root.value==val)  {
+            return root;
+        }
+        else if(val < root.value)    {
+            return searchBST(root.left,val);
+        }   else if(val > root.value)    {
+            return searchBST(root.right, val);
         }
         return null;
     }
@@ -137,6 +151,106 @@ public class BinarySearchTree {
         return List.of(node,parentNode);
     }
 
+    // Breadth First Search
+    public void levelOrder(Node rootNode)   {
+        Queue<Node> nodeQueue = new LinkedList<>();
+        if(rootNode!=null)  {
+            nodeQueue.offer(rootNode);
+        }
+        while(!nodeQueue.isEmpty()) {
+            var node = nodeQueue.poll();
+            System.out.print(node.value);
+            System.out.print(" ");
+            if (node.left != null)   {
+                nodeQueue.offer(node.left);
+            }
+            if(node.right != null)  {
+                nodeQueue.offer(node.right);
+            }
+        }
+    }
+
+//    Depth first search - recursive
+    public void getInOrder(Node rootNode) {
+        if(rootNode == null)    {
+            return;
+        }
+        getInOrder(rootNode.left);
+        System.out.print(rootNode.value);
+        System.out.print(" ");
+        getInOrder(rootNode.right);
+    }
+
+    public void getPreOrder(Node rootNode)    {
+        if(rootNode == null)    {
+            return;
+        }
+        System.out.print(rootNode.value);
+        System.out.print(" ");
+        getPreOrder(rootNode.left);
+        getPreOrder(rootNode.right);
+    }
+
+    public void getPostOrder(Node rootNode)   {
+        if(rootNode == null)    {
+            return;
+        }
+        getPostOrder(rootNode.left);
+        getPostOrder(rootNode.right);
+        System.out.print(rootNode.value);
+        System.out.print(" ");
+    }
+
+    // DFS - iterative
+
+    public void getPreOrderIterative(Node rootNode)   {
+        Stack<Node> stack = new Stack<>();
+        if(rootNode != null)    {
+            stack.push(rootNode);
+        }
+        while(!stack.isEmpty()) {
+            var node = stack.pop();
+            System.out.print(node.value);
+            System.out.print(" ");
+            if(node.right != null)  {
+                stack.push(node.right);
+            }
+            if(node.left != null)   {
+                stack.push(node.left);
+            }
+        }
+    }
+
+    public void getInOrderIterative(Node rootNode)   {
+        Stack<Node> stack = new Stack<>();
+        Node current = rootNode;
+        while(!stack.isEmpty() || current != null)  {
+            while(current != null)  {
+                stack.push(current);
+                current = current.left;
+            }
+            current = stack.pop();
+            System.out.print(current.value + " ");
+            current = current.right;
+        }
+    }
+
+    public void getPostOrderIterative(Node rootNode)    {
+        if(rootNode == null) return;
+        var stack1 = new Stack<Node>();
+        var stack2 = new Stack<Node>();
+        stack1.push(rootNode);
+        while(!stack1.isEmpty())    {
+            var node = stack1.pop();
+            stack2.push(node);
+            if(node.left!=null) stack1.push(node.left);
+            if(node.right!= null) stack1.push(node.right);
+        }
+
+        while(!stack2.isEmpty())    {
+            System.out.print(stack2.pop().value + " ");
+        }
+    }
 }
 
 class TestBinaryTree    {
@@ -144,14 +258,47 @@ class TestBinaryTree    {
         var binaryTree = new BinarySearchTree();
 //        binaryTree.insert(9);
 //        binaryTree.insert(4);
+//        binaryTree.insert(1);
+//        binaryTree.insert(6);
+//        binaryTree.insert(5);
+//        binaryTree.insert(7);
+//        binaryTree.insert(12);
+//        binaryTree.insert(15);
+//        binaryTree.insert(14);
+        binaryTree.insert(4);
+        binaryTree.insert(2);
+        binaryTree.insert(7);
+        binaryTree.insert(1);
+        binaryTree.insert(3);
 
-        var node = binaryTree.lookUp(9);
+        var node = binaryTree.searchBST(binaryTree.getRootNode(),2);
         if(node != null) {
             System.out.println(node);
         }   else {
             System.out.println("Node not found");
         }
-        System.out.println(binaryTree.remove(9));
-        System.out.println(binaryTree.getRootNode());
+//        System.out.println(binaryTree.remove(9));
+//        System.out.println(binaryTree.getRootNode());
+//        System.out.println("Printing Inorder");
+//        binaryTree.getInOrder(binaryTree.getRootNode());
+//        System.out.println();
+//        System.out.println("Printing Preorder");
+//        binaryTree.getPreOrder(binaryTree.getRootNode());
+//        System.out.println();
+//        System.out.println("Printing Postorder");
+//        binaryTree.getPostOrder(binaryTree.getRootNode());
+//        System.out.println();
+//        System.out.println("Printing levelOrder");
+//        binaryTree.levelOrder(binaryTree.getRootNode());
+//        System.out.println();
+//        System.out.println("Printing Preorder Iteratively");
+//        binaryTree.getPreOrderIterative(binaryTree.getRootNode());
+//        System.out.println();
+//        System.out.println("Printing Inorder Iteratively");
+//        binaryTree.getInOrderIterative(binaryTree.getRootNode());
+//        System.out.println();
+//        System.out.println("Printing Postorder Iteratively");
+//        binaryTree.getPostOrderIterative(binaryTree.getRootNode());
+//        System.out.println();
     }
 }
